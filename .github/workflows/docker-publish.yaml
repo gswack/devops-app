@@ -20,9 +20,14 @@ jobs:
         uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
+      
+      - name: Set up Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > kubeconfig
+          export KUBECONFIG=kubeconfig
 
       - name: Deploy to Kubernetes
         run: |
+          minikube start
           kubectl apply -f deployment.yaml
           kubectl apply -f service.yaml
-          
